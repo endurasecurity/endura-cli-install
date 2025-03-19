@@ -6,8 +6,8 @@
 set -eu
 
 CHANNEL=endura-repo-stable
+ASC_URL="https://endurasecurity.github.io/${CHANNEL}/endura-cli-tools/endura.asc"
 DEB_URL="https://endurasecurity.github.io/${CHANNEL}/endura-cli-tools/deb"
-SIG_URL="https://endurasecurity.github.io/${CHANNEL}/endura-cli-tools/endura.asc"
 MISSING_CMDS=""
 RPM_URL="https://endurasecurity.github.io/${CHANNEL}/endura-cli-tools/rpm"
 TGZ_URL="https://endurasecurity.github.io/${CHANNEL}/endura-cli-tools/tgz/endura-cli-tools-latest.tgz"
@@ -51,7 +51,7 @@ main() {
 install_deb_package() {
     info "installing deb repository: ${DEB_URL}"
     echo "deb [signed-by=/usr/share/keyrings/endura-keyring.gpg] ${DEB_URL} /" | tee /etc/apt/sources.list.d/endura-cli-tools.list
-    curl -sL "${SIG_URL}" | gpg --dearmor --batch --yes -o /usr/share/keyrings/endura-keyring.gpg
+    curl -sL "${ASC_URL}" | gpg --dearmor --batch --yes -o /usr/share/keyrings/endura-keyring.gpg
     
     info "installing endura-cli-tools package"
     apt-get update
@@ -68,7 +68,7 @@ name=Endura Security - CLI Tools
 baseurl=${RPM_URL}
 enabled=1
 gpgcheck=1
-gpgkey=${SIG_URL}
+gpgkey=${ASC_URL}
 EOF
 
     info "installing endura-cli-tools package"
@@ -81,7 +81,11 @@ EOF
 install_tgz_package() {
     info "downloading tgz package: ${TGZ_URL}"
     curl -sL "$TGZ_URL" -o /tmp/endura-cli-tools.tgz
-    curl -sL "$SIG_URL" -o /tmp/endura-cli-tools.tgz.sig
+    curl -sL "$TGZ_URL.sig" -o /tmp/endura-cli-tools.tgz.sig
+
+    if ! curl -fsSL "$ASC_URL" | gpg --import; then
+        fail "failed to import GPG public key from $ASC_URL"
+    fi
 
     if ! gpg --verify /tmp/endura-cli-tools.tgz.sig /tmp/endura-cli-tools.tgz; then
         fail "tgz package signature verification failed"
