@@ -64,7 +64,7 @@ install_rpm_package() {
     info "installing rpm repository: ${RPM_URL}" 
     cat <<EOF | tee /etc/yum.repos.d/endura-cli-tools.repo
 [endura-cli-tools]
-name=Endura Cli Tools Repository
+name=Endura Security - CLI Tools
 baseurl=${RPM_URL}
 enabled=1
 gpgcheck=1
