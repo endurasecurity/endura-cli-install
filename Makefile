@@ -22,6 +22,18 @@ define WARN
 	"\033[1;33m[warning]\033[0m \033[1;37m[$(@)]\033[0m"
 endef
 
+# bootstrap
+bootstrap: FORCE
+	@echo -e $(INFO) $(NAME)
+	@if command -v dnf &> /dev/null; then \
+		sudo -E dnf install -y shellcheck; \
+	elif command -v apt-get &> /dev/null; then \
+		sudo -E apt-get update; \
+		sudo -E apt-get install -y shellcheck; \
+	else \
+		@echo -e $(ERROR) unsupported system; \
+	fi
+
 # clean
 clean: FORCE
 	@echo -e $(INFO) $(NAME)

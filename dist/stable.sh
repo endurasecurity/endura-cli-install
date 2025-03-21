@@ -52,7 +52,7 @@ install_deb_package() {
     info "installing deb repository: ${DEB_URL}"
     echo "deb [signed-by=/usr/share/keyrings/endura-keyring.gpg] ${DEB_URL} /" | tee /etc/apt/sources.list.d/endura-cli-tools.list
     curl -sL "${ASC_URL}" | gpg --dearmor --batch --yes -o /usr/share/keyrings/endura-keyring.gpg
-    
+
     info "installing endura-cli-tools package"
     apt-get update
     apt-get install -y endura-cli-tools
@@ -61,7 +61,7 @@ install_deb_package() {
 }
 
 install_rpm_package() {
-    info "installing rpm repository: ${RPM_URL}" 
+    info "installing rpm repository: ${RPM_URL}"
     cat <<EOF | tee /etc/yum.repos.d/endura-cli-tools.repo
 [endura-cli-tools]
 name=Endura Security - CLI Tools
@@ -95,7 +95,7 @@ install_tgz_package() {
     tar -C / -xzf /tmp/endura-cli-tools.tgz
     rm -f /tmp/endura-cli-tools.tgz /tmp/endura-cli-tools.tgz.sig
 
-    info "successfully installed endura $(endura version)"    
+    info "successfully installed endura $(endura version)"
 }
 
 is_deb_distro() {
@@ -107,15 +107,15 @@ is_rpm_distro() {
 }
 
 info() {
-    printf "${BOLD}${WHITE}[endura]${RESET} ${GREEN}[info]${RESET} %s\n" "$1" >&2
+    printf "${GREEN}[info]${RESET} ${BOLD}${WHITE}[endura]${RESET} %s\n" "$1" >&2
 }
 
 warn() {
-    printf "${BOLD}${WHITE}[endura]${RESET} ${YELLOW}[warn]${RESET} %s\n" "$1" >&2
+    printf "${YELLOW}[warn]${RESET} ${BOLD}${WHITE}[endura]${RESET} %s\n" "$1" >&2
 }
 
 fail() {
-    printf "${BOLD}${WHITE}[endura]${RESET} ${RED}[fatal]${RESET} %s\n" "$1" >&2
+    printf "${RED}[fatal]${RESET} ${BOLD}${WHITE}[endura]${RESET} %s\n" "$1" >&2
     exit 1
 }
 
