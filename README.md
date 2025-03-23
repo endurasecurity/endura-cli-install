@@ -1,1 +1,3 @@
 # endura-cli-install
+
+test
