@@ -39,8 +39,8 @@ main() {
 
     if is_deb_distro; then
         install_deb_package
-    elif is_rpm_distro; then
-        install_rpm_package
+    elif is_rhel_distro; then
+        install_rhel_package
     else
         install_tgz_package
     fi
@@ -60,7 +60,7 @@ install_deb_package() {
     info "successfully installed endura $(endura version)"
 }
 
-install_rpm_package() {
+install_rhel_package() {
     info "installing rpm repository: ${RPM_URL}"
     cat <<EOF | tee /etc/yum.repos.d/endura-cli-tools.repo
 [endura-cli-tools]
@@ -102,8 +102,8 @@ is_deb_distro() {
     grep -qiE "debian|ubuntu" /etc/os-release 2>/dev/null
 }
 
-is_rpm_distro() {
-    grep -qiE "almalinux|amazon linux|centos|fedora|oracle|rocky|suse" /etc/os-release 2>/dev/null
+is_rhel_distro() {
+    grep -qiE "almalinux|amazon linux|centos|fedora|oracle|rocky" /etc/os-release 2>/dev/null
 }
 
 info() {
