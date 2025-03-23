@@ -16,6 +16,10 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Setup Git
+        run: |
+          git config --global user.name "Infrared Security"
+          git config --global user.email "info@infraredsecurity.com"
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
